@@ -1,5 +1,7 @@
 # Base Repository Package
 
+[![Build Status](https://travis-ci.org/jsdecena/baserepo.svg?branch=master)](https://travis-ci.org/jsdecena/baserepo)
+
 ## Install
 
 - Run in your terminal `composer require jsdecena/baserepo`
