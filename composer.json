@@ -1,0 +1,37 @@
+{
+  "name": "jsdecena/baserepo",
+  "description": "Base repository",
+  "autoload": {
+    "psr-4": {
+      "Jsdecena\\Baserepo\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Jsdecena\\Baserepo\\Test\\": "tests/"
+    }
+  },
+  "require": {
+    "php": "^7.1.3",
+    "fideloper/proxy": "^4.0",
+    "laravel/tinker": "^1.0",
+    "league/fractal": "^0.17.0",
+    "illuminate/support": "^5.6"
+  },
+  "repositories": {
+    "dev-package": {
+      "type": "path",
+      "url": "src",
+      "options": {
+        "symlink": true
+      }
+    }
+  },
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Jeff Simons Decena",
+      "email": "jeff.decena@yahoo.com"
+    }
+  ]
+}
