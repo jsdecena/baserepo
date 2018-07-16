@@ -2,6 +2,10 @@
   "name": "jsdecena/baserepo",
   "description": "Base repository",
   "autoload": {
+    "classmap": [
+      "tests/database/seeds",
+      "tests/database/factories"
+    ],
     "psr-4": {
       "Jsdecena\\Baserepo\\": "src/"
     }
@@ -17,6 +21,9 @@
     "laravel/tinker": "^1.0",
     "league/fractal": "^0.17.0",
     "illuminate/support": "^5.6"
+  },
+  "require-dev": {
+    "orchestra/testbench": "~3.0"
   },
   "repositories": {
     "dev-package": {
