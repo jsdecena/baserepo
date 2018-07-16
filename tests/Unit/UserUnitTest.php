@@ -2,8 +2,8 @@
 
 namespace Jsdecena\Baserepo\Test\Unit;
 
-use Jsdecena\Baserepo\Test\Models\Repositories\UserRepository;
-use Jsdecena\Baserepo\Test\Models\User;
+use Jsdecena\Baserepo\Models\User;
+use Jsdecena\Baserepo\Repositories\UserRepository;
 use Jsdecena\Baserepo\Test\TestCase;
 
 class UserUnitTest extends TestCase
