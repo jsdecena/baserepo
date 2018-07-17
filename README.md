@@ -1,6 +1,9 @@
 # Base Repository Package
 
 [![Build Status](https://travis-ci.org/jsdecena/baserepo.svg?branch=master)](https://travis-ci.org/jsdecena/baserepo)
+[![Latest Stable Version](https://poser.pugx.org/jsdecena/baserepo/v/stable)](https://packagist.org/packages/jsdecena/baserepo)
+[![Total Downloads](https://poser.pugx.org/jsdecena/baserepo/downloads)](https://packagist.org/packages/jsdecena/baserepo)
+[![License](https://poser.pugx.org/jsdecena/baserepo/license)](https://packagist.org/packages/jsdecena/baserepo)
 
 ## Install
 
