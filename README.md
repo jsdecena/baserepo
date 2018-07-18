@@ -70,3 +70,7 @@ class MyController extends Controller {
     }
 }
 ```
+
+# Author
+
+[Jeff Simons Decena](https://jsdecena.me)
