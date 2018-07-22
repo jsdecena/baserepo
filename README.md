@@ -5,7 +5,9 @@
 [![Total Downloads](https://poser.pugx.org/jsdecena/baserepo/downloads)](https://packagist.org/packages/jsdecena/baserepo)
 [![License](https://poser.pugx.org/jsdecena/baserepo/license)](https://packagist.org/packages/jsdecena/baserepo)
 
-## Install
+#### Base repository is used by [Laracom](https://github.com/Laracommerce/laracom) under the hood 
+
+## How to install
 
 - Run in your terminal `composer require jsdecena/baserepo`
 
@@ -28,6 +30,7 @@
 namespace App\Repositories;
 
 use App\User;
+use Illuminate\Http\Request;
 use Illuminate\Database\QueryException;
 use Jsdecena\Baserepo\BaseRepository;
 
@@ -59,15 +62,120 @@ use App\User;
 
 class MyController extends Controller {
     
+    public function index() 
+    {
+        $userRepo = new UserRepository(new User);
+        $user = $userRepo->all();
+
+        return response()->json($data);    
+    }
+    
     public function store(Request $request)
     {
         // do data validation
+    
+        try {
+            
+            $userRepo = new UserRepository(new User);
+            $user = $userRepo->createUser($request->all());
+    
+            return response()->json($data, 201);
         
-        $userRepo = new UserRepository(new User);
-        $user = $userRepo->createUser($request->all());
-
-        return response()->json($data, 201);
+        } catch (Illuminate\Database\QueryException $e) {
+            
+            return response()->json([
+                'error' => 'user_cannot_create',
+                'message' => $e->getMessage()
+            ]);        
+        }
     }
+
+    public function show($id)
+    {
+        // do data validation
+        
+        try {
+            
+            $userRepo = new UserRepository(new User);
+            $user = $userRepo->findOneOrFail($id);
+    
+            return response()->json($data);
+            
+        } catch (Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            
+            return response()->json([
+                'error' => 'user_no_found',
+                'message' => $e->getMessage()
+            ]);
+        }
+    }
+    
+    public function update(Request $request, $id)
+    {
+        // do data validation
+        
+        try {
+            
+            $userRepo = new UserRepository(new User);
+            $user = $userRepo->findOneOrFail($id);
+            
+            // Create an instance of the repository again 
+            // but now pass the user object. 
+            // You can DI the repo to the controller if you do not want this.
+            $userRepo = new UserRepository($user);
+            $userRepo->update($request->all())
+    
+            return response()->json($data);
+            
+        } catch (Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            
+            return response()->json([
+                'error' => 'user_no_found',
+                'message' => $e->getMessage()
+            ]);            
+            
+        } catch (Illuminate\Database\QueryException $e) {
+            
+            return response()->json([
+                'error' => 'user_cannot_update',
+                'message' => $e->getMessage()
+            ]);
+        }
+    }
+    
+    public function destroy($id)
+    {
+        // do data validation
+        
+        try {
+            
+            $userRepo = new UserRepository(new User);
+            $user = $userRepo->findOneOrFail($id);
+            
+            // Create an instance of the repository again 
+            // but now pass the user object. 
+            // You can DI the repo to the controller if you do not want this.
+            $userRepo = new UserRepository($user);
+            $userRepo->delete()
+    
+            return response()->json($data);
+            
+        } catch (Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            
+            return response()->json([
+                'error' => 'user_no_found',
+                'message' => $e->getMessage()
+            ]);            
+            
+        } catch (Illuminate\Database\QueryException $e) {
+            
+            return response()->json([
+                'error' => 'user_cannot_delete',
+                'message' => $e->getMessage()
+            ]);
+        }
+    }    
+    
 }
 ```
 
