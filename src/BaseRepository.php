@@ -200,12 +200,14 @@ class BaseRepository implements BaseRepositoryInterface
      * @param LengthAwarePaginator $paginator
      * @param TransformerAbstract $transformer
      * @param string $resourceKey
+     * @param string $includes
      * @return Scope
      */
     public function processPaginatedResults(
         LengthAwarePaginator $paginator,
         TransformerAbstract $transformer,
-        string $resourceKey
+        string $resourceKey,
+        string $includes = null
     ) : Scope
     {
         $items = $paginator->getCollection();
@@ -215,6 +217,16 @@ class BaseRepository implements BaseRepositoryInterface
 
         $manager = new ItemAndCollectionManager(new Manager);
 
-        return $manager->createCollectionData($fractalCollection);
+        if (!is_null($includes)) {
+            $included = explode(',', $includes);
+            return $manager->createCollectionData(
+                $fractalCollection,
+                $included
+            );
+        } else {
+            return $manager->createCollectionData(
+                $fractalCollection
+            );
+        }
     }
 }

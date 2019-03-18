@@ -106,11 +106,13 @@ interface BaseRepositoryInterface
      * @param LengthAwarePaginator $paginator
      * @param TransformerAbstract $transformer
      * @param string $resourceKey
+     * @param string $includes
      * @return Scope
      */
     public function processPaginatedResults(
         LengthAwarePaginator $paginator,
         TransformerAbstract $transformer,
-        string $resourceKey
+        string $resourceKey,
+        string $includes = null
     ) : Scope;
 }
