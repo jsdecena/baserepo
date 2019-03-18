@@ -5,9 +5,92 @@ namespace Jsdecena\Baserepo\Test\Unit;
 use Jsdecena\Baserepo\Models\User;
 use Jsdecena\Baserepo\Repositories\UserRepository;
 use Jsdecena\Baserepo\Test\TestCase;
+use Jsdecena\Baserepo\Transformers\UserTransformer;
 
 class UserUnitTest extends TestCase
 {
+    /** @test */
+    public function it_can_transform_paginated_collection()
+    {
+        $data = [
+            'name' => 'John Doe',
+            'email' => 'john@doe.com'
+        ];
+
+        factory(User::class)->create($data);
+
+        $userRepo = new UserRepository(new User);
+
+        $perPage = 10;
+        $transform = $userRepo->processPaginatedResults(User::paginate($perPage), new UserTransformer, 'users');
+        $transformData = $transform->toArray();
+        $response = $transformData['data'];
+
+        collect($response)->each(function ($item) use ($data) {
+            $this->assertEquals($data['name'], $item['attributes']['name']);
+            $this->assertEquals($data['email'], $item['attributes']['email']);
+        });
+
+        $paginate = $transformData['meta']['pagination'];
+
+        $this->assertEquals(1, $paginate['total']);
+        $this->assertEquals(1, $paginate['count']);
+        $this->assertEquals($perPage, $paginate['per_page']);
+        $this->assertEquals(1, $paginate['current_page']);
+        $this->assertEquals(1, $paginate['total_pages']);
+    }
+
+    /** @test */
+    public function it_can_transform_user_collection_and_paginate_it()
+    {
+        $data = [
+            'name' => 'John Doe',
+            'email' => 'john@doe.com'
+        ];
+
+        factory(User::class)->create($data);
+
+        $userRepo = new UserRepository(new User);
+
+        $transform = $userRepo->processCollectionTransformer($userRepo->listUsers(), new UserTransformer, 'users');
+        $transformData = $transform->toArray();
+
+        $response = $transformData['data'];
+
+        collect($response)->each(function ($item) use ($data) {
+            $this->assertEquals($data['name'], $item['attributes']['name']);
+            $this->assertEquals($data['email'], $item['attributes']['email']);
+        });
+
+        $paginate = $transformData['meta']['pagination'];
+
+        $this->assertEquals(1, $paginate['total']);
+        $this->assertEquals(1, $paginate['count']);
+        $this->assertEquals(25, $paginate['per_page']);
+        $this->assertEquals(1, $paginate['current_page']);
+        $this->assertEquals(1, $paginate['total_pages']);
+    }
+
+    /** @test */
+    public function it_can_transform_the_user()
+    {
+        $data = [
+            'name' => 'John Doe',
+            'email' => 'john@doe.com'
+        ];
+
+        $user = factory(User::class)->create($data);
+
+        $userRepo = new UserRepository(new User);
+        $transform = $userRepo->processItemTransformer($user, new UserTransformer, 'users');
+
+        $response = $transform->toArray()['data'];
+
+        $this->assertEquals($response['type'], 'users');
+        $this->assertEquals($response['attributes']['name'], $data['name']);
+        $this->assertEquals($response['attributes']['email'], $data['email']);
+    }
+    
     /** @test */
     public function it_can_list_the_users()
     {
@@ -17,7 +100,7 @@ class UserUnitTest extends TestCase
             'password' => 'secret'
         ];
 
-        $user = $this->createUser($data);
+        $user = factory(User::class)->create($data);
 
         $userRepo = new UserRepository(new User);
         $users = $userRepo->listUsers();
@@ -37,7 +120,7 @@ class UserUnitTest extends TestCase
             'password' => 'secret'
         ];
 
-        $user = $this->createUser($data);
+        $user = factory(User::class)->create($data);
 
         $userRepo = new UserRepository($user);
         $deleted = $userRepo->deleteUser();
@@ -54,7 +137,7 @@ class UserUnitTest extends TestCase
             'password' => 'secret'
         ];
 
-        $user = $this->createUser($data);
+        $user = factory(User::class)->create($data);
 
         $update = [
             'name' => 'Jane Doe'
@@ -75,7 +158,7 @@ class UserUnitTest extends TestCase
             'password' => 'secret'
         ];
 
-        $user = $this->createUser($data);
+        $user = factory(User::class)->create($data);
 
         $userRepo = new UserRepository(new User);
         $found = $userRepo->findUserById($user->id);
@@ -94,16 +177,11 @@ class UserUnitTest extends TestCase
             'password' => 'secret'
         ];
 
-        $user = $this->createUser($data);
+        $userRepo = new UserRepository(new User);
+        $user = $userRepo->createUser($data);
 
         $this->assertInstanceOf(User::class, $user);
         $this->assertEquals($data['name'], $user->name);
         $this->assertEquals($data['email'], $user->email);
-    }
-
-    private function createUser($data)
-    {
-        $userRepo = new UserRepository(new User);
-        return $userRepo->createUser($data);
     }
 }
