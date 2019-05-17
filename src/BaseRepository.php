@@ -123,7 +123,7 @@ class BaseRepository implements BaseRepositoryInterface
         $offset = ($page * $perPage) - $perPage;
 
         return new LengthAwarePaginator(
-            array_slice($data, $offset, $perPage, true),
+            array_values(array_slice($data, $offset, $perPage, true)),
             count($data),
             $perPage,
             $page,
