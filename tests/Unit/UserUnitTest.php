@@ -10,6 +10,66 @@ use Jsdecena\Baserepo\Transformers\UserTransformer;
 class UserUnitTest extends TestCase
 {
     /** @test */
+    public function it_can_transform_a_model_collection()
+    {
+        $data = [
+            'name' => 'John Doe',
+            'email' => 'john@doe.com'
+        ];
+
+        $user = factory(User::class)->create($data);
+
+        $userRepo = new UserRepository(new User);
+        $collection = $userRepo->transformCollection(User::all(), new UserTransformer, User::RESOURCE_KEY);
+
+        $json = json_encode(
+            [
+                'data' => [
+                    [
+                        'type' => User::RESOURCE_KEY,
+                        'id' => "$user->id",
+                        'attributes' => $data,
+                        'links' => [
+                            'self' => config('app.url') .'/users/' . $user->id
+                        ]
+                    ]
+                ]
+            ]
+        );
+
+        $this->assertJsonStringEqualsJsonString($json, json_encode($collection));
+    }
+
+    /** @test */
+    public function it_can_transform_a_single_model()
+    {
+        $data = [
+            'name' => 'John Doe',
+            'email' => 'john@doe.com'
+        ];
+
+        $user = factory(User::class)->create($data);
+
+        $userRepo = new UserRepository(new User);
+        $item = $userRepo->transformItem($user, new UserTransformer, User::RESOURCE_KEY);
+
+        $json = json_encode(
+            [
+                'data' => [
+                    'type' => User::RESOURCE_KEY,
+                    'id' => "$user->id",
+                    'attributes' => $data,
+                    'links' => [
+                        'self' => config('app.url') .'/users/' . $user->id
+                    ]
+                ]
+            ]
+        );
+
+        $this->assertJsonStringEqualsJsonString($json, json_encode($item));
+    }
+
+    /** @test */
     public function it_can_transform_paginated_collection()
     {
         $data = [

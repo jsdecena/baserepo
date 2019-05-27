@@ -2,13 +2,15 @@
 
 namespace Jsdecena\Baserepo;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Input;
 use League\Fractal\Manager;
-use League\Fractal\Pagination\IlluminatePaginatorAdapter;
+use League\Fractal\Pagination\IlluminatePaginatorAdapter;;
+use League\Fractal\Resource\Item;
 use League\Fractal\Scope;
 use League\Fractal\TransformerAbstract;
 use League\Fractal\Resource\Collection as FractalCollection;
@@ -19,12 +21,30 @@ class BaseRepository implements BaseRepositoryInterface
     protected $model;
 
     /**
+     * @var BaseManager
+     */
+    protected $manager;
+
+    /**
+     * @var BasePaginator
+     */
+    protected $paginator;
+
+    /**
+     * @var $query Builder
+     */
+    protected $query;
+
+    /**
      * BaseRepository constructor.
      * @param Model $model
      */
     public function __construct(Model $model)
     {
         $this->model = $model;
+
+        $this->manager = new BaseManager;
+        $this->paginator = new BasePaginator;
     }
 
     /**
@@ -228,5 +248,61 @@ class BaseRepository implements BaseRepositoryInterface
                 $fractalCollection
             );
         }
+    }
+
+    /**
+     * Transform the Patient
+     *
+     * @param Model $model
+     * @param TransformerAbstract $transformer
+     * @param $resourceKey
+     * @param array $includes
+     * @return array
+     */
+    public function transformItem(
+        Model $model,
+        TransformerAbstract $transformer,
+        $resourceKey,
+        array $includes = []
+    ) : array
+    {
+        $resource = new Item($model, $transformer, $resourceKey);
+        return $this->manager->buildData($resource, $includes);
+    }
+    /**
+     * Transform Patient collection
+     *
+     * @param $collection
+     * @param TransformerAbstract $transformer
+     * @param $resourceKey
+     * @param array $includes
+     * @return array
+     */
+    public function transformCollection(
+        $collection,
+        TransformerAbstract $transformer,
+        $resourceKey,
+        array $includes = []
+    ) : array
+    {
+        $resource = new FractalCollection($collection, $transformer, $resourceKey);
+        return $this->manager->buildData($resource, $includes);
+    }
+
+    /**
+     * @param Model|Builder $modelOrBuilder
+     * @param array $params
+     * @return Builder
+     */
+    public function queryBy($modelOrBuilder, array $params) : Builder
+    {
+        $start = $modelOrBuilder;
+        if (!empty($params)) {
+            $start->where($params);
+        }
+
+        $this->query = $start;
+
+        return $this->query;
     }
 }

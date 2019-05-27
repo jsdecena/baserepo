@@ -42,5 +42,12 @@
       "name": "Jeff Simons Decena",
       "email": "jeff.decena@yahoo.com"
     }
-  ]
+  ],
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Jsdecena\\Baserepo\\BaseRepository"
+      ]
+    }
+  }
 }
