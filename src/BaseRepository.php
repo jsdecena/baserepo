@@ -344,7 +344,7 @@ class BaseRepository implements BaseRepositoryInterface
         }
 
         if ($offset) {
-            $collection = $builder->where('id', '>', $offset)->take($limit)->get();
+            $collection = $builder->offset($offset)->take($limit)->get();
         } else {
             $collection = $builder->take($limit)->get();
         }
