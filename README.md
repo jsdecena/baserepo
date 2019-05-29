@@ -11,18 +11,6 @@
 
 - Run in your terminal `composer require jsdecena/baserepo`
 
-- Add the base service provider in your `config/app.php` file like this:
-
-```php
-    'providers' => [
-
-        /*
-         * Package Service Providers...
-         */
-        Jsdecena\Baserepo\BaseRepositoryProvider::class,
-    ],
-```
-
 - In your repository class, extend it so you can use the methods readily available.
 
 ```php

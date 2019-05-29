@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class User extends Model
 {
+    const RESOURCE_KEY = 'users';
+
     /**
      *
      * This is only a sample model to recreate the real scenario
