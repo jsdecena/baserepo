@@ -2,6 +2,7 @@
 
 namespace Jsdecena\Baserepo\Test\Unit;
 
+use Illuminate\Database\Eloquent\Collection;
 use Jsdecena\Baserepo\Models\User;
 use Jsdecena\Baserepo\Repositories\UserRepository;
 use Jsdecena\Baserepo\Test\TestCase;
@@ -9,6 +10,59 @@ use Jsdecena\Baserepo\Transformers\UserTransformer;
 
 class UserUnitTest extends TestCase
 {
+    /** @test */
+    public function it_should_return_all_collection()
+    {
+        factory(User::class, 10)->create();
+
+        $user = factory(User::class)->create();
+
+        $userRepo = new UserRepository(new User);
+
+        $builder = User::where('name', $user->name);
+
+        $data = $userRepo->getData($builder, new UserTransformer, false);
+
+        $this->assertInstanceOf(Collection::class, $data);
+    }
+
+    /** @test */
+    public function it_can_paginate_collection_with_cursor()
+    {
+        factory(User::class, 10)->create();
+
+        $user = factory(User::class)->create();
+
+        $userRepo = new UserRepository(new User);
+
+        $builder = User::where('name', $user->name);
+
+        $data = $userRepo->getData($builder, new UserTransformer);
+
+        $json = json_encode(
+            [
+                'data' => [
+                    [
+                        'id' => $user->id,
+                        'name' => $user->name,
+                        'email' => $user->email
+                    ]
+                ],
+                'meta' => [
+                    'cursor' => [
+                        'current' => null,
+                        'prev' => null,
+                        'next' => User::all()->count(),
+                        'count' => 1
+                    ]
+                ]
+            ]
+        );
+
+        $this->assertJsonStringEqualsJsonString($json, json_encode($data));
+    }
+
+
     /** @test */
     public function it_can_transform_a_model_collection()
     {

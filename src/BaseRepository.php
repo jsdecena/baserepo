@@ -9,6 +9,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Input;
 use League\Fractal\Manager;
+use League\Fractal\Pagination\Cursor;
 use League\Fractal\Pagination\IlluminatePaginatorAdapter;;
 use League\Fractal\Resource\Item;
 use League\Fractal\Scope;
@@ -133,6 +134,8 @@ class BaseRepository implements BaseRepositoryInterface
     }
 
     /**
+     * Paginate arrays
+     *
      * @param array $data
      * @param int $perPage
      * @return LengthAwarePaginator
@@ -160,6 +163,8 @@ class BaseRepository implements BaseRepositoryInterface
      * @param string $resourceKey
      * @param string $includes
      * @return Scope
+     *
+     * @deprecated use @transformItem
      */
     public function processItemTransformer(
         Model $model,
@@ -184,6 +189,8 @@ class BaseRepository implements BaseRepositoryInterface
      * @param string $includes
      * @param int $perPage
      * @return Scope
+     *
+     * @deprecated use @transformCollection
      */
     public function processCollectionTransformer(
         Collection $collection,
@@ -217,6 +224,8 @@ class BaseRepository implements BaseRepositoryInterface
     }
 
     /**
+     * Transform a Paginated response
+     *
      * @param LengthAwarePaginator $paginator
      * @param TransformerAbstract $transformer
      * @param string $resourceKey
@@ -251,7 +260,7 @@ class BaseRepository implements BaseRepositoryInterface
     }
 
     /**
-     * Transform the Patient
+     * Transform a Model
      *
      * @param Model $model
      * @param TransformerAbstract $transformer
@@ -269,8 +278,9 @@ class BaseRepository implements BaseRepositoryInterface
         $resource = new Item($model, $transformer, $resourceKey);
         return $this->manager->buildData($resource, $includes);
     }
+
     /**
-     * Transform Patient collection
+     * Transform a Model Collection
      *
      * @param $collection
      * @param TransformerAbstract $transformer
@@ -290,6 +300,8 @@ class BaseRepository implements BaseRepositoryInterface
     }
 
     /**
+     * Create custom build query
+     *
      * @param Model|Builder $modelOrBuilder
      * @param array $params
      * @return Builder
@@ -304,5 +316,47 @@ class BaseRepository implements BaseRepositoryInterface
         $this->query = $start;
 
         return $this->query;
+    }
+
+    /**
+     * @param Builder $builder
+     * @param TransformerAbstract $transformer
+     * @param bool $isPaginated
+     * @param int $limit
+     *
+     *
+     * @param null $offset
+     * @param null $previous
+     *
+     * @return array|\Illuminate\Database\Eloquent\Collection
+     */
+    public function getData(
+        Builder $builder,
+        TransformerAbstract $transformer,
+        $isPaginated = true,
+        $limit = 50,
+        $offset = null,
+        $previous = null
+    )
+    {
+        if (!$isPaginated) {
+            return $builder->get();
+        }
+
+        if ($offset) {
+            $collection = $builder->where('id', '>', $offset)->take($limit)->get();
+        } else {
+            $collection = $builder->take($limit)->get();
+        }
+
+        $newCursor = $collection->last()->id;
+        $cursor = new Cursor($offset, $previous, $newCursor, $collection->count());
+
+        $resource = new FractalCollection($collection, $transformer);
+        $resource->setCursor($cursor);
+
+        $manager = new Manager;
+
+        return $manager->createData($resource)->toArray();
     }
 }
