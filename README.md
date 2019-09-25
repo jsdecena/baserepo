@@ -62,10 +62,11 @@ use App\User;
 
 class MyController extends Controller {
     
+    private $userRepository;
+
     public function index() 
     {
-        $userRepo = new UserRepository(new User);
-        $user = $userRepo->all();
+        $user = $this->>userRepository->all();
 
         return response()->json($data);    
     }
@@ -76,8 +77,7 @@ class MyController extends Controller {
     
         try {
             
-            $userRepo = new UserRepository(new User);
-            $user = $userRepo->createUser($request->all());
+            $user = $this->>userRepository->createUser($request->all());
     
             return response()->json($data, 201);
         
@@ -96,8 +96,7 @@ class MyController extends Controller {
         
         try {
             
-            $userRepo = new UserRepository(new User);
-            $user = $userRepo->findOneOrFail($id);
+            $user = $this->>userRepository->findOneOrFail($id);
     
             return response()->json($data);
             
@@ -116,8 +115,7 @@ class MyController extends Controller {
         
         try {
             
-            $userRepo = new UserRepository(new User);
-            $user = $userRepo->findOneOrFail($id);
+            $user = $this->>userRepository->findOneOrFail($id);
             
             // Create an instance of the repository again 
             // but now pass the user object. 
@@ -149,8 +147,7 @@ class MyController extends Controller {
         
         try {
             
-            $userRepo = new UserRepository(new User);
-            $user = $userRepo->findOneOrFail($id);
+            $user = $this->>userRepository->findOneOrFail($id);
             
             // Create an instance of the repository again 
             // but now pass the user object. 
