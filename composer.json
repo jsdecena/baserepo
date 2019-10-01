@@ -44,7 +44,7 @@
   "extra": {
     "laravel": {
       "providers": [
-        "Jsdecena\\Baserepo\\BaseRepository"
+        "Jsdecena\\Baserepo\\BaseRepositoryProvider"
       ]
     }
   }

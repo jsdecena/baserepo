@@ -19,6 +19,9 @@ use League\Fractal\Resource\Item as FractalItem;
 
 class BaseRepository implements BaseRepositoryInterface
 {
+    /**
+     * @var Model
+     */
     protected $model;
 
     /**
@@ -43,7 +46,6 @@ class BaseRepository implements BaseRepositoryInterface
     public function __construct(Model $model)
     {
         $this->model = $model;
-
         $this->manager = new BaseManager;
         $this->paginator = new BasePaginator;
     }
