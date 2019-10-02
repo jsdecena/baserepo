@@ -4,6 +4,7 @@
 [![Latest Stable Version](https://poser.pugx.org/jsdecena/baserepo/v/stable)](https://packagist.org/packages/jsdecena/baserepo)
 [![Total Downloads](https://poser.pugx.org/jsdecena/baserepo/downloads)](https://packagist.org/packages/jsdecena/baserepo)
 [![License](https://poser.pugx.org/jsdecena/baserepo/license)](https://packagist.org/packages/jsdecena/baserepo)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fjsdecena%2Fbaserepo.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fjsdecena%2Fbaserepo?ref=badge_shield)
 
 #### Base repository is used by [Laracom](https://github.com/Laracommerce/laracom) under the hood 
 
@@ -167,3 +168,7 @@ class MyController extends Controller {
 # Author
 
 [Jeff Simons Decena](https://jsdecena.me)
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fjsdecena%2Fbaserepo.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fjsdecena%2Fbaserepo?ref=badge_large)
