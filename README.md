@@ -52,6 +52,15 @@ use App\User;
 class MyController extends Controller {
     
     private $userRepository;
+    
+    /**
+    *
+    * Inject your repository or the interface here
+    */
+    public function __construct(UserRepository $userRepository) 
+    {
+        $this->userRepository = $userRepository;
+    }
 
     public function index() 
     {
