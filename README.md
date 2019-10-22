@@ -66,7 +66,7 @@ class MyController extends Controller {
 
     public function index() 
     {
-        $user = $this->>userRepository->all();
+        $user = $this->userRepository->all();
 
         return response()->json($data);    
     }
@@ -77,7 +77,7 @@ class MyController extends Controller {
     
         try {
             
-            $user = $this->>userRepository->createUser($request->all());
+            $user = $this->userRepository->createUser($request->all());
     
             return response()->json($data, 201);
         
@@ -96,7 +96,7 @@ class MyController extends Controller {
         
         try {
             
-            $user = $this->>userRepository->findOneOrFail($id);
+            $user = $this->userRepository->findOneOrFail($id);
     
             return response()->json($data);
             
@@ -115,7 +115,7 @@ class MyController extends Controller {
         
         try {
             
-            $user = $this->>userRepository->findOneOrFail($id);
+            $user = $this->userRepository->findOneOrFail($id);
             
             // Create an instance of the repository again 
             // but now pass the user object. 
@@ -147,7 +147,7 @@ class MyController extends Controller {
         
         try {
             
-            $user = $this->>userRepository->findOneOrFail($id);
+            $user = $this->userRepository->findOneOrFail($id);
             
             // Create an instance of the repository again 
             // but now pass the user object. 
