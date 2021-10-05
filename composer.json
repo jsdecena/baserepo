@@ -2,10 +2,6 @@
   "name": "jsdecena/baserepo",
   "description": "Base repository",
   "autoload": {
-    "classmap": [
-      "tests/database/seeds",
-      "tests/database/factories"
-    ],
     "psr-4": {
       "Jsdecena\\Baserepo\\": "src/"
     }
