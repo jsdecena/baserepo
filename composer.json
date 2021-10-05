@@ -1,5 +1,5 @@
 {
-  "name": "jsdecena/baserepo",
+  "name": "goodmartian/baserepo",
   "description": "Base repository",
   "autoload": {
     "psr-4": {
