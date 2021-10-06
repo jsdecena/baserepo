@@ -66,7 +66,7 @@ class MyController extends Controller {
     {
         $user = $this->userRepository->all();
 
-        return response()->json($data);    
+        return response()->json($user);    
     }
     
     public function store(Request $request)
@@ -77,7 +77,7 @@ class MyController extends Controller {
             
             $user = $this->userRepository->createUser($request->all());
     
-            return response()->json($data, 201);
+            return response()->json($user, 201);
         
         } catch (Illuminate\Database\QueryException $e) {
             
@@ -96,7 +96,7 @@ class MyController extends Controller {
             
             $user = $this->userRepository->findOneOrFail($id);
     
-            return response()->json($data);
+            return response()->json($user);
             
         } catch (Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             
@@ -120,8 +120,11 @@ class MyController extends Controller {
             // You can DI the repo to the controller if you do not want this.
             $userRepo = new UserRepository($user);
             $userRepo->update($request->all())
+           
+            // You can also do this now, so you would not have to instantiate again the repository
+            $this->userRepository->update($request->all(), $user);
     
-            return response()->json($data);
+            return response()->json($user);
             
         } catch (Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             
@@ -153,7 +156,7 @@ class MyController extends Controller {
             $userRepo = new UserRepository($user);
             $userRepo->delete()
     
-            return response()->json($data);
+            return response()->json(['data' => 'User deleted.']);
             
         } catch (Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             
