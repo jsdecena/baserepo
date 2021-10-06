@@ -114,12 +114,6 @@ class MyController extends Controller {
         try {
             
             $user = $this->userRepository->findOneOrFail($id);
-            
-            // Create an instance of the repository again 
-            // but now pass the user object. 
-            // You can DI the repo to the controller if you do not want this.
-            $userRepo = new UserRepository($user);
-            $userRepo->update($request->all())
            
             // You can also do this now, so you would not have to instantiate again the repository
             $this->userRepository->update($request->all(), $user);
