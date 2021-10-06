@@ -63,9 +63,9 @@ class BaseRepository implements BaseRepositoryInterface
      * @param array $data
      * @return bool
      */
-    public function update(array $data, $id = null) : bool
+    public function update(array $data, Model $model = null) : bool
     {
-        if(!is_null($id)) {
+        if(!is_null($model)) {
             $model = $this->find($id);
             return $mode->update($data);
         }
