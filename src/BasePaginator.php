@@ -13,9 +13,9 @@ class BasePaginator
      * @param LengthAwarePaginator $paginator
      * @param TransformerAbstract $transformer
      * @param $resourceKey
-     * @return mixed
+     * @return Collection
      */
-    public function paginate(LengthAwarePaginator $paginator, TransformerAbstract $transformer, $resourceKey)
+    public function paginate(LengthAwarePaginator $paginator, TransformerAbstract $transformer, $resourceKey): Collection
     {
         $collection = $paginator->getCollection();
         $resource = new Collection($collection, $transformer, $resourceKey);

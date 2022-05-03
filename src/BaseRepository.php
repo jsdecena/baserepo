@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Input;
 use League\Fractal\Manager;
 use League\Fractal\Pagination\Cursor;
 use League\Fractal\Pagination\IlluminatePaginatorAdapter;;
@@ -61,12 +60,13 @@ class BaseRepository implements BaseRepositoryInterface
 
     /**
      * @param array $data
+     * @param Model|null $model
      * @return bool
      */
     public function update(array $data, Model $model = null) : bool
     {
         if(!is_null($model)) {
-            return $mode->update($data);
+            return $model->update($data);
         }
         return $this->model->update($data);
     }
@@ -77,7 +77,7 @@ class BaseRepository implements BaseRepositoryInterface
      * @param string $sortBy
      * @return mixed
      */
-    public function all($columns = ['*'], string $orderBy = 'id', string $sortBy = 'asc')
+    public function all(array $columns = ['*'], string $orderBy = 'id', string $sortBy = 'asc')
     {
         return $this->model->orderBy($orderBy, $sortBy)->get($columns);
     }
@@ -145,7 +145,7 @@ class BaseRepository implements BaseRepositoryInterface
      * @param int $perPage
      * @return LengthAwarePaginator
      */
-    public function paginateArrayResults(array $data, int $perPage = 50)
+    public function paginateArrayResults(array $data, int $perPage = 50): LengthAwarePaginator
     {
         $page = app('request')->input('page', 1);
         $offset = ($page * $perPage) - $perPage;
@@ -166,7 +166,7 @@ class BaseRepository implements BaseRepositoryInterface
      * @param Model $model
      * @param TransformerAbstract $transformer
      * @param string $resourceKey
-     * @param string $includes
+     * @param string|null $includes
      * @return Scope
      *
      * @deprecated use @transformItem
@@ -191,7 +191,7 @@ class BaseRepository implements BaseRepositoryInterface
      * @param Collection $collection
      * @param TransformerAbstract $transformer
      * @param string $resourceKey
-     * @param string $includes
+     * @param string|null $includes
      * @param int $perPage
      * @return Scope
      *
@@ -202,7 +202,7 @@ class BaseRepository implements BaseRepositoryInterface
         TransformerAbstract $transformer,
         string $resourceKey,
         string $includes = null,
-        $perPage = 25
+        int $perPage = 25
     ) : Scope {
 
         $manager = new ItemAndCollectionManager(new Manager);
@@ -234,7 +234,7 @@ class BaseRepository implements BaseRepositoryInterface
      * @param LengthAwarePaginator $paginator
      * @param TransformerAbstract $transformer
      * @param string $resourceKey
-     * @param string $includes
+     * @param string|null $includes
      * @return Scope
      */
     public function processPaginatedResults(
@@ -328,8 +328,6 @@ class BaseRepository implements BaseRepositoryInterface
      * @param TransformerAbstract $transformer
      * @param bool $isPaginated
      * @param int $limit
-     *
-     *
      * @param null $offset
      * @param null $previous
      *
@@ -338,8 +336,8 @@ class BaseRepository implements BaseRepositoryInterface
     public function getData(
         Builder $builder,
         TransformerAbstract $transformer,
-        $isPaginated = true,
-        $limit = 50,
+        bool $isPaginated = true,
+        int $limit = 50,
         $offset = null,
         $previous = null
     )

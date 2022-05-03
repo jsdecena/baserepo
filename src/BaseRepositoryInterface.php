@@ -28,7 +28,7 @@ interface BaseRepositoryInterface
      * @param string $sortBy
      * @return mixed
      */
-    public function all($columns = array('*'), string $orderBy = 'id', string $sortBy = 'asc');
+    public function all(array $columns = ['*'], string $orderBy = 'id', string $sortBy = 'asc');
 
     /**
      * @param $id
@@ -70,13 +70,13 @@ interface BaseRepositoryInterface
      * @param int $perPage
      * @return LengthAwarePaginator
      */
-    public function paginateArrayResults(array $data, int $perPage = 50);
+    public function paginateArrayResults(array $data, int $perPage = 50): LengthAwarePaginator;
 
     /**
      * @param Model $model
      * @param TransformerAbstract $transformer
      * @param string $resourceKey
-     * @param string $includes
+     * @param string|null $includes
      * @return Scope
      */
     public function processItemTransformer(
@@ -90,7 +90,7 @@ interface BaseRepositoryInterface
      * @param Collection $collection
      * @param TransformerAbstract $transformer
      * @param string $resourceKey
-     * @param string $includes
+     * @param string|null $includes
      * @param int $perPage
      * @return Scope
      */
@@ -99,14 +99,14 @@ interface BaseRepositoryInterface
         TransformerAbstract $transformer,
         string $resourceKey,
         string $includes = null,
-        $perPage = 25
+        int $perPage = 25
     ) : Scope;
 
     /**
      * @param LengthAwarePaginator $paginator
      * @param TransformerAbstract $transformer
      * @param string $resourceKey
-     * @param string $includes
+     * @param string|null $includes
      * @return Scope
      */
     public function processPaginatedResults(

@@ -171,6 +171,10 @@ class MyController extends Controller {
 }
 ```
 
+# Testing
+
+- Run `make test`
+
 # Author
 
 [Jeff Simons Decena](https://jsdecena.me)
