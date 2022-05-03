@@ -7,7 +7,7 @@ on:
     branches: [ master ]
 
 jobs:
-  develop:
+  unittest:
     runs-on: ubuntu-18.04
     container:
       image: jsdecena/php8-fpm:8.0.13
