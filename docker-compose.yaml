@@ -1,0 +1,10 @@
+version: '3'
+services:
+  app:
+    image: jsdecena/php8-fpm:8.0.13
+    container_name: baserepo
+    restart: unless-stopped
+    tty: true
+    working_dir: /var/www
+    volumes:
+      - ./:/var/www
