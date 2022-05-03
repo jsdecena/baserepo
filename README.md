@@ -6,7 +6,9 @@
 [![License](https://poser.pugx.org/jsdecena/baserepo/license)](https://packagist.org/packages/jsdecena/baserepo)
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fjsdecena%2Fbaserepo.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fjsdecena%2Fbaserepo?ref=badge_shield)
 
-#### Base repository is used by [Laracom](https://github.com/Laracommerce/laracom) under the hood 
+## Sign-up with [Digital Ocean and get $20 discount](https://m.do.co/c/bce94237de96)!
+
+## Buy me a [coffeee](https://ko-fi.com/G2G0ADEK) so I can continue development of this package
 
 ## How to install
 
